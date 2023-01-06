@@ -11,8 +11,8 @@ from lib import dict
 # Переменные
 config_dict = get_default_config()
 config_dict['language'] = 'ru'
-owm = OWM('efc87620f604377edcc345d117678309')
-bot = telebot.TeleBot("5945117405:AAHSSGGrHPqeJRriha9RoHRw3Hak6W5aAjk")
+owm = OWM()
+bot = telebot.TeleBot()
 
 
 # Обработчик команды старт
