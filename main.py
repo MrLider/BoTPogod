@@ -1,18 +1,24 @@
+import configparser
 import telebot
 import pyowm
+import requests
+import json
 from pyowm.owm import OWM
 from pyowm.utils.config import get_default_config
 from pyowm.commons.exceptions import NotFoundError
 from telebot import types
-import requests
-import json
 from lib import dict
+
+read_config = configparser.ConfigParser()
+read_config.read("settings.ini")
+BOT_TOKEN = read_config['settings']['token'].strip().replace(" ", "")  # Токен бота
+OWM_TOKEN = read_config['settings']['token_owm'].strip().replace(" ", "")  # Токен бота
 
 # Переменные
 config_dict = get_default_config()
 config_dict['language'] = 'ru'
-owm = OWM()
-bot = telebot.TeleBot()
+owm = OWM(OWM_TOKEN)
+bot = telebot.TeleBot(BOT_TOKEN)
 
 
 # Обработчик команды старт
