@@ -1,11 +1,10 @@
 import requests
 import json
 import configparser
-import pyowm
 from geopy import geocoders
 from lib import dict
 from pyowm.owm import OWM
-from pyowm.utils.config import get_default_config
+
 
 read_config = configparser.ConfigParser()
 read_config.read("settings.ini")

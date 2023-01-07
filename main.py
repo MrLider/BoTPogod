@@ -1,20 +1,15 @@
 import configparser
 import telebot
-import pyowm
-import requests
-import json
-from pyowm.owm import OWM
+
 from pyowm.utils.config import get_default_config
 from pyowm.commons.exceptions import NotFoundError
 from telebot import types
-from lib import dict
 from functions import yandex_weather, geo_pos, owm_wather
 
 
 read_config = configparser.ConfigParser()
 read_config.read("settings.ini")
 BOT_TOKEN = read_config['settings']['token'].strip().replace(" ", "")  # Токен бота
-
 YA_TOKEN = read_config['settings']['token_yandex'].strip().replace(" ", "")  # Токен Yandex
 
 # Переменные
@@ -22,7 +17,7 @@ config_dict = get_default_config()
 config_dict['language'] = 'ru'
 bot = telebot.TeleBot(BOT_TOKEN)
 
-
+# Кнопки меню
 markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
 lesogorsk = types.KeyboardButton("Лесогорск")
 moscow = types.KeyboardButton("Москва")
@@ -64,8 +59,8 @@ def main(message):
         post_owm = owm_wather(message.text)
 
     elif message.text == "Другой":
-        post_owm = ".."
-        post_ya = "Введите название населённого пункта"
+        post_owm = f"Введите название населённого пункта: "
+        post_ya = f"..."
 
 
     else:
@@ -74,10 +69,12 @@ def main(message):
             lon = geo_pos(message.text)[1]
             post_ya = yandex_weather(lat, lon, message.text, YA_TOKEN)
             post_owm = owm_wather(message.text)
-        except NotFoundError:
-            post_owm = "Населённый пункт не найден"
-            post_ya = "Введите название населённого пункта"
-
+        except NotFoundError :
+            post_owm = f"Населённый пункт не найден"
+            post_ya = f"Введите название населённого пункта"
+        except AttributeError :
+            post_owm = f"Населённый пункт не найден"
+            post_ya = f"Введите название населённого пункта"
     bot.send_message(message.chat.id, post_owm)
     bot.send_message(message.chat.id, post_ya, reply_markup=markup)
 
