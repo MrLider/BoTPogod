@@ -60,7 +60,8 @@ def main(message):
 
     elif message.text == "Другой":
         post_owm = f"Введите название населённого пункта: "
-        post_ya = f"..."
+        post_ya = None
+
 
 
     else:
@@ -75,7 +76,13 @@ def main(message):
         except AttributeError :
             post_owm = f"Населённый пункт не найден"
             post_ya = f"Введите название населённого пункта"
-    bot.send_message(message.chat.id, post_owm)
-    bot.send_message(message.chat.id, post_ya, reply_markup=markup)
+
+    if post_ya == None:
+        bot.send_message(message.chat.id, post_owm)
+    else:
+        bot.send_message(message.chat.id, post_owm)
+        bot.send_message(message.chat.id, post_ya, reply_markup=markup)
+
+
 
 bot.polling(none_stop = True)
