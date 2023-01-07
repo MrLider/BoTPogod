@@ -59,7 +59,7 @@ def main(message):
         post = yandex_weather(lat, lon, message.text, YA_TOKEN)
     elif message.text == "Другой":
 
-        # post = ""
+        post = ""
     else:
         lat = geo_pos(message.text)[0]
         lon = geo_pos(message.text)[1]
