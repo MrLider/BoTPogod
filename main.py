@@ -1,5 +1,7 @@
 import configparser
 import telebot
+import os, sys
+from requests.exceptions import ConnectionError, ReadTimeout
 
 from pyowm.utils.config import get_default_config
 from pyowm.commons.exceptions import NotFoundError
@@ -84,5 +86,10 @@ def main(message):
         bot.send_message(message.chat.id, post_ya, reply_markup=markup)
 
 
-
-bot.polling(none_stop = True)
+try:
+    bot.infinity_polling(timeout=10, long_polling_timeout=5)
+except (ConnectionError, ReadTimeout) as e:
+    sys.stdout.flush()
+    os.execv(sys.argv[0], sys.argv)
+else:
+    bot.infinity_polling(timeout=10, long_polling_timeout=5)
