@@ -1,6 +1,7 @@
 import requests
 import json
 import configparser
+from functools import lru_cache
 from geopy import geocoders
 from lib import dict
 from pyowm.owm import OWM
@@ -11,12 +12,16 @@ read_config.read("settings.ini")
 OWM_TOKEN = read_config['settings']['token_owm'].strip().replace(" ", "")  # Токен QWM
 owm = OWM(OWM_TOKEN)
 
+#Функция вычисление координат
+@lru_cache(maxsize=None)
 def geo_pos(city: str):
     geolocator = geocoders.Nominatim(user_agent="telebot")
     latitude = str(geolocator.geocode(city).latitude)
     longitude = str(geolocator.geocode(city).longitude)
     return latitude, longitude
 
+
+# Функция запроса погоды с сервера яндекс
 def yandex_weather(latitude, longitude, city, token_yandex: str):
     url = f"https://api.weather.yandex.ru/v2/informers?lat={latitude}&lon={longitude}"
     headers = {"X-Yandex-API-Key": token_yandex}
@@ -31,6 +36,8 @@ def yandex_weather(latitude, longitude, city, token_yandex: str):
     else:
         post = f'На сегодня достаточно.\n Погодный сервер Яндекс устал!'
     return post
+
+# Функция запроса погоды с сервера OWM
 def owm_wather(city: str):
     mgr = owm.weather_manager()
     observation = mgr.weather_at_place(city)

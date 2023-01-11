@@ -2,7 +2,6 @@ import configparser
 import telebot
 import os, sys
 from requests.exceptions import ConnectionError, ReadTimeout
-
 from pyowm.utils.config import get_default_config
 from pyowm.commons.exceptions import NotFoundError
 from telebot import types
@@ -68,10 +67,10 @@ def main(message):
 
     else:
         try:
-            lat = geo_pos(message.text)[0]
-            lon = geo_pos(message.text)[1]
+            lat, lon  = geo_pos(message.text)
             post_ya = yandex_weather(lat, lon, message.text, YA_TOKEN)
             post_owm = owm_wather(message.text)
+            print(geo_pos.cache_info())
         except NotFoundError :
             post_owm = f"Населённый пункт не найден"
             post_ya = f"Введите название населённого пункта"
