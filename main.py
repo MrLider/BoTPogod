@@ -79,7 +79,7 @@ def main(message):
             post_owm = f"Населённый пункт не найден"
             post_ya = f"Введите название населённого пункта"
 
-    if post_ya == None:
+    if post_ya is None:
         bot.send_message(message.chat.id, post_owm)
     else:
         bot.send_message(message.chat.id, post_owm)
