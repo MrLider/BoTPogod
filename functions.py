@@ -1,10 +1,12 @@
 import requests
 import json
 import configparser
+import requests as req
 from functools import lru_cache
 from geopy import geocoders
-from lib import dict
+from lib import dict_ya
 from pyowm.owm import OWM
+
 
 
 read_config = configparser.ConfigParser()
@@ -29,7 +31,7 @@ def yandex_weather(latitude, longitude, city, token_yandex: str):
     if r.status_code == 200:
         data = json.loads(r.text)
         fact = data["fact"]
-        condition = dict(fact["condition"])
+        condition = dict_ya(fact["condition"])
         post = f' Погодный сервер Яндекс: \n'
         post += f'В населённом пункте {city} сейчас {condition}  \n'
         post += f'Температура в районе {fact["temp"]} °С'
@@ -50,3 +52,26 @@ def owm_wather(city: str):
 
     return post
 
+def acuu_weather(city: str, code_loc: str, token_accu: str):
+    url_weather = f'http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/{code_loc}?' \
+                  f'apikey={token_accu}&language=ru&metric=True'
+    response = req.get(url_weather, headers={"APIKey": token_accu})
+    json_data = json.loads(response.text)
+    dict_weather = dict()
+    dict_weather['link'] = json_data[0]['MobileLink']
+    time = 'сейчас'
+    dict_weather[time] = {'temp': json_data[0]['Temperature']['Value'], 'sky': json_data[0]['IconPhrase']}
+    for i in range(1, len(json_data)):
+        time = 'через' + str(i) + 'ч'
+        dict_weather[time] = {'temp': json_data[i]['Temperature']['Value'], 'sky': json_data[i]['IconPhrase']}
+    post = f' Погодный сервер AcuuWeather: \n'
+    post += f'В населённом пункте {city} сейчас {dict_weather["сейчас"]["sky"]}  \n'
+    post += f'Температура в районе {dict_weather["сейчас"]["temp"]} °С'
+    return post
+def code_location(latitude: str, longitude: str, token_accu: str):
+    url_location_key = 'http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=' \
+                       f'{token_accu}&q={latitude},{longitude}&language=ru'
+    resp_loc = req.get(url_location_key, headers={"APIKey": token_accu})
+    json_data = json.loads(resp_loc.text)
+    code = json_data['Key']
+    return code

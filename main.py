@@ -5,13 +5,14 @@ from requests.exceptions import ConnectionError, ReadTimeout
 from pyowm.utils.config import get_default_config
 from pyowm.commons.exceptions import NotFoundError
 from telebot import types
-from functions import yandex_weather, geo_pos, owm_wather
+from functions import yandex_weather, geo_pos, owm_wather, code_location, acuu_weather
 
 
 read_config = configparser.ConfigParser()
 read_config.read("settings.ini")
 BOT_TOKEN = read_config['settings']['token'].strip().replace(" ", "")  # Токен бота
 YA_TOKEN = read_config['settings']['token_yandex'].strip().replace(" ", "")  # Токен Yandex
+ACUU_TOKEN = read_config['settings']['token_acuu'].strip().replace(" ", "")  # Токен Yandex
 
 # Переменные
 config_dict = get_default_config()
@@ -40,17 +41,23 @@ def main(message):
         lon = 99.53259
         post_ya = yandex_weather(lat, lon, message.text, YA_TOKEN)
         post_owm = owm_wather(message.text)
+        code_loc = code_location(lat, lon, ACUU_TOKEN)
+        post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
     elif message.text == "Москва":
         lat = 55.67827
         lon = 37.53719
         post_ya = yandex_weather(lat, lon, message.text, YA_TOKEN)
         post_owm = owm_wather(message.text)
+        code_loc = code_location(lat, lon, ACUU_TOKEN)
+        post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
     elif message.text == "Кишинёв":
         lat = 46.88650
         lon = 28.99194
         post_ya = yandex_weather(lat, lon, message.text, YA_TOKEN)
         post_owm = owm_wather(message.text)
+        code_loc = code_location(lat, lon, ACUU_TOKEN)
+        post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
 
     elif message.text == "Сочи":
@@ -58,10 +65,13 @@ def main(message):
         lon = 39.727434
         post_ya = yandex_weather(lat, lon, message.text, YA_TOKEN)
         post_owm = owm_wather(message.text)
+        code_loc = code_location(lat, lon, ACUU_TOKEN)
+        post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
     elif message.text == "Другой":
         post_owm = f"Введите название населённого пункта: "
         post_ya = None
+        post_acuu = None
 
 
 
@@ -70,18 +80,24 @@ def main(message):
             lat, lon  = geo_pos(message.text)
             post_ya = yandex_weather(lat, lon, message.text, YA_TOKEN)
             post_owm = owm_wather(message.text)
+            code_loc = code_location(lat, lon, ACUU_TOKEN)
+            post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
             print(geo_pos.cache_info())
         except NotFoundError :
             post_owm = f"Населённый пункт не найден"
             post_ya = f"Введите название населённого пункта"
+            post_acuu = None
         except AttributeError :
             post_owm = f"Населённый пункт не найден"
             post_ya = f"Введите название населённого пункта"
+            post_acuu = None
 
     if post_ya is None:
         bot.send_message(message.chat.id, post_owm)
+        bot.send_message(message.chat.id, post_acuu)
     else:
         bot.send_message(message.chat.id, post_owm)
+        bot.send_message(message.chat.id, post_acuu)
         bot.send_message(message.chat.id, post_ya, reply_markup=markup)
 
 

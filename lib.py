@@ -1,4 +1,4 @@
-def dict(param):
+def dict_ya(param):
     condition = {'clear':'ясно', 'partly-cloudy':'малооблачно', 'cloudy':' облачно с прояснениями',
                'overcast':'пасмурно', 'drizzle':'морось', 'light-rain':'небольшой дождь',
                'rain':'дождь', 'moderate-rain':'умеренно сильный дождь', 'heavy-rain':'сильный дождь',
