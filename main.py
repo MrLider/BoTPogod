@@ -42,7 +42,10 @@ def main(message):
         post_ya = yandex_weather(lat, lon, message.text, YA_TOKEN)
         post_owm = owm_wather(message.text)
         code_loc = code_location(lat, lon, ACUU_TOKEN)
-        post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
+        if code_loc is None:
+            post_acuu = None
+        else:
+            post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
     elif message.text == "Москва":
         lat = 55.67827
@@ -50,15 +53,21 @@ def main(message):
         post_ya = yandex_weather(lat, lon, message.text, YA_TOKEN)
         post_owm = owm_wather(message.text)
         code_loc = code_location(lat, lon, ACUU_TOKEN)
-        post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
+        if code_loc is None:
+            post_acuu = None
+        else:
+            post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
+
     elif message.text == "Кишинёв":
         lat = 46.88650
         lon = 28.99194
         post_ya = yandex_weather(lat, lon, message.text, YA_TOKEN)
         post_owm = owm_wather(message.text)
         code_loc = code_location(lat, lon, ACUU_TOKEN)
-        post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
-
+        if code_loc is None:
+            post_acuu = None
+        else:
+            post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
     elif message.text == "Сочи":
         lat = 43.593232
@@ -66,14 +75,15 @@ def main(message):
         post_ya = yandex_weather(lat, lon, message.text, YA_TOKEN)
         post_owm = owm_wather(message.text)
         code_loc = code_location(lat, lon, ACUU_TOKEN)
-        post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
+        if code_loc is None:
+            post_acuu = None
+        else:
+            post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
     elif message.text == "Другой":
         post_owm = f"Введите название населённого пункта: "
         post_ya = None
         post_acuu = None
-
-
 
     else:
         try:
@@ -81,11 +91,14 @@ def main(message):
             post_ya = yandex_weather(lat, lon, message.text, YA_TOKEN)
             post_owm = owm_wather(message.text)
             code_loc = code_location(lat, lon, ACUU_TOKEN)
-            post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
+            if code_loc is None:
+                post_acuu = None
+            else:
+                post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
             print(geo_pos.cache_info())
-        except NotFoundError or UnboundLocalError or AttributeError or KeyError :
+        except NotFoundError or UnboundLocalError or AttributeError:
             post_owm = f"Населённый пункт не найден"
-            post_ya = f"Введите название населённого пункта"
+            post_ya = f"Введите название населённого пункта:"
             post_acuu = None
 
     if post_ya is None and post_acuu is None:
@@ -97,7 +110,6 @@ def main(message):
         bot.send_message(message.chat.id, post_owm)
         bot.send_message(message.chat.id, post_acuu)
         bot.send_message(message.chat.id, post_ya, reply_markup=markup)
-
 
 try:
     bot.infinity_polling(timeout=10, long_polling_timeout=5)
