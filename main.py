@@ -83,18 +83,19 @@ def main(message):
             code_loc = code_location(lat, lon, ACUU_TOKEN)
             post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
             print(geo_pos.cache_info())
-        except NotFoundError :
-            post_owm = f"Населённый пункт не найден"
-            post_ya = f"Введите название населённого пункта"
-            post_acuu = None
-        except AttributeError :
+        except NotFoundError or UnboundLocalError or AttributeError or KeyError :
             post_owm = f"Населённый пункт не найден"
             post_ya = f"Введите название населённого пункта"
             post_acuu = None
 
-    if post_ya is None:
+
+
+
+    if post_ya is None and post_acuu is None:
         bot.send_message(message.chat.id, post_owm)
-        bot.send_message(message.chat.id, post_acuu)
+    elif post_acuu is None:
+        bot.send_message(message.chat.id, post_owm)
+        bot.send_message(message.chat.id, post_ya, reply_markup=markup)
     else:
         bot.send_message(message.chat.id, post_owm)
         bot.send_message(message.chat.id, post_acuu)

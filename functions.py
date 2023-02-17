@@ -22,7 +22,6 @@ def geo_pos(city: str):
     longitude = str(geolocator.geocode(city).longitude)
     return latitude, longitude
 
-
 # Функция запроса погоды с сервера яндекс
 def yandex_weather(latitude, longitude, city, token_yandex: str):
     url = f"https://api.weather.yandex.ru/v2/informers?lat={latitude}&lon={longitude}"
@@ -52,6 +51,7 @@ def owm_wather(city: str):
 
     return post
 
+#Функция запроса погоды с сервера AuuWeather
 def acuu_weather(city: str, code_loc: str, token_accu: str):
     url_weather = f'http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/{code_loc}?' \
                   f'apikey={token_accu}&language=ru&metric=True'
@@ -66,12 +66,16 @@ def acuu_weather(city: str, code_loc: str, token_accu: str):
         dict_weather[time] = {'temp': json_data[i]['Temperature']['Value'], 'sky': json_data[i]['IconPhrase']}
     post = f' Погодный сервер AcuuWeather: \n'
     post += f'В населённом пункте {city} сейчас {dict_weather["сейчас"]["sky"]}  \n'
-    post += f'Температура в районе {dict_weather["сейчас"]["temp"]} °С'
+    post += f'Температура в районе {str(round(dict_weather["сейчас"]["temp"]))} °С'
     return post
+
+#Функция запроса кода населёного пункта
+@lru_cache(maxsize=None)
 def code_location(latitude: str, longitude: str, token_accu: str):
     url_location_key = 'http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=' \
                        f'{token_accu}&q={latitude},{longitude}&language=ru'
     resp_loc = req.get(url_location_key, headers={"APIKey": token_accu})
     json_data = json.loads(resp_loc.text)
+    print(json_data)
     code = json_data['Key']
     return code
