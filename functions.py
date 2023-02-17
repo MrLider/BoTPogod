@@ -76,6 +76,6 @@ def code_location(latitude: str, longitude: str, token_accu: str):
                        f'{token_accu}&q={latitude},{longitude}&language=ru'
     resp_loc = req.get(url_location_key, headers={"APIKey": token_accu})
     json_data = json.loads(resp_loc.text)
-    print(json_data)
+    print(geo_pos.cache_info())
     code = json_data['Key']
     return code
