@@ -65,7 +65,7 @@ def acuu_weather(city: str, code_loc: str, token_accu: str):
         time = 'через' + str(i) + 'ч'
         dict_weather[time] = {'temp': json_data[i]['Temperature']['Value'], 'sky': json_data[i]['IconPhrase']}
     post = f' Погодный сервер AcuuWeather: \n'
-    post += f'В населённом пункте {city} сейчас {dict_weather["сейчас"]["sky"]}  \n'
+    post += f'В населённом пункте {city} сейчас {str(dict_weather["сейчас"]["sky"]).lower()}  \n'
     post += f'Температура в районе {str(round(dict_weather["сейчас"]["temp"]))} °С'
     return post
 

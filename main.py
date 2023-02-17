@@ -88,9 +88,6 @@ def main(message):
             post_ya = f"Введите название населённого пункта"
             post_acuu = None
 
-
-
-
     if post_ya is None and post_acuu is None:
         bot.send_message(message.chat.id, post_owm)
     elif post_acuu is None:
