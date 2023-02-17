@@ -43,7 +43,7 @@ def main(message):
         post_owm = owm_wather(message.text)
         code_loc = code_location(lat, lon, ACUU_TOKEN)
         if code_loc is None:
-            post_acuu = None
+            post_acuu = f'На сегодня достаточно.\n Погодный сервер AcuuWeather устал!'
         else:
             post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
@@ -54,7 +54,7 @@ def main(message):
         post_owm = owm_wather(message.text)
         code_loc = code_location(lat, lon, ACUU_TOKEN)
         if code_loc is None:
-            post_acuu = None
+            post_acuu = f'На сегодня достаточно.\n Погодный сервер AcuuWeather устал!'
         else:
             post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
@@ -65,7 +65,7 @@ def main(message):
         post_owm = owm_wather(message.text)
         code_loc = code_location(lat, lon, ACUU_TOKEN)
         if code_loc is None:
-            post_acuu = None
+            post_acuu = f'На сегодня достаточно.\n Погодный сервер AcuuWeather устал!'
         else:
             post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
@@ -76,7 +76,7 @@ def main(message):
         post_owm = owm_wather(message.text)
         code_loc = code_location(lat, lon, ACUU_TOKEN)
         if code_loc is None:
-            post_acuu = None
+            post_acuu = f'На сегодня достаточно.\n Погодный сервер AcuuWeather устал!'
         else:
             post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
@@ -92,7 +92,7 @@ def main(message):
             post_owm = owm_wather(message.text)
             code_loc = code_location(lat, lon, ACUU_TOKEN)
             if code_loc is None:
-                post_acuu = None
+                post_acuu = f'На сегодня достаточно.\n Погодный сервер AcuuWeather устал!'
             else:
                 post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
             print(geo_pos.cache_info())
