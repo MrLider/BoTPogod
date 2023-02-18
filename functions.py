@@ -55,8 +55,8 @@ def owm_wather(city: str):
 def acuu_weather(city: str, code_loc: str, token_accu: str):
     url_weather = f'http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/{code_loc}?' \
                   f'apikey={token_accu}&language=ru&metric=True'
-    response = req.get(url_weather, headers={"APIKey": token_accu})
-    json_data = json.loads(response.text)
+    r = req.get(url_weather, headers={"APIKey": token_accu})
+    json_data = json.loads(r.text)
     dict_weather = dict()
     dict_weather['link'] = json_data[0]['MobileLink']
     time = 'сейчас'
@@ -70,7 +70,7 @@ def acuu_weather(city: str, code_loc: str, token_accu: str):
     return post
 
 #Функция запроса кода населёного пункта
-@lru_cache(maxsize=None)
+
 def code_location(latitude: str, longitude: str, token_accu: str):
     try:
         url_location_key = 'http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=' \

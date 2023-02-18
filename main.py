@@ -1,6 +1,7 @@
 import configparser
 import telebot
 import os, sys
+import json
 from requests.exceptions import ConnectionError, ReadTimeout
 from pyowm.utils.config import get_default_config
 from pyowm.commons.exceptions import NotFoundError
@@ -96,10 +97,22 @@ def main(message):
             else:
                 post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
             print(geo_pos.cache_info())
-        except NotFoundError or UnboundLocalError or AttributeError:
+        except NotFoundError:
             post_owm = f"Населённый пункт не найден"
             post_ya = f"Введите название населённого пункта:"
             post_acuu = None
+        except AttributeError:
+            post_owm = f"Населённый пункт не найден"
+            post_ya = f"Введите название населённого пункта:"
+            post_acuu = None
+        except  UnboundLocalError:
+            post_owm = f"Населённый пункт не найден"
+            post_ya = f"Введите название населённого пункта:"
+            post_acuu = None
+        except json.decoder.JSONDecodeError:
+            lat, lon = geo_pos(message.text)
+            post_ya = yandex_weather(lat, lon, message.text, YA_TOKEN)
+            post_owm = owm_wather(message.text)
 
     if post_ya is None and post_acuu is None:
         bot.send_message(message.chat.id, post_owm)
@@ -108,8 +121,8 @@ def main(message):
         bot.send_message(message.chat.id, post_ya, reply_markup=markup)
     else:
         bot.send_message(message.chat.id, post_owm)
-        bot.send_message(message.chat.id, post_acuu)
-        bot.send_message(message.chat.id, post_ya, reply_markup=markup)
+        bot.send_message(message.chat.id, post_ya)
+        bot.send_message(message.chat.id, post_acuu, reply_markup=markup)
 
 try:
     bot.infinity_polling(timeout=10, long_polling_timeout=5)
