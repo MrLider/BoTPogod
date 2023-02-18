@@ -37,8 +37,8 @@ def echo_all(message):
 # Обработчик сообщений
 def main(message):
     if message.text == "Лесогорск":
-        lat = 56.05305
-        lon = 99.53259
+        lat = '56.05305'
+        lon = '99.53259'
         post_ya = yandex_weather(lat, lon, message.text, YA_TOKEN)
         post_owm = owm_wather(message.text)
         code_loc = code_location(lat, lon, ACUU_TOKEN)
@@ -48,8 +48,8 @@ def main(message):
             post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
     elif message.text == "Москва":
-        lat = 55.67827
-        lon = 37.53719
+        lat = '55.67827'
+        lon = '37.53719'
         post_ya = yandex_weather(lat, lon, message.text, YA_TOKEN)
         post_owm = owm_wather(message.text)
         code_loc = code_location(lat, lon, ACUU_TOKEN)
@@ -59,8 +59,8 @@ def main(message):
             post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
     elif message.text == "Кишинёв":
-        lat = 46.88650
-        lon = 28.99194
+        lat = '46.88650'
+        lon = '28.99194'
         post_ya = yandex_weather(lat, lon, message.text, YA_TOKEN)
         post_owm = owm_wather(message.text)
         code_loc = code_location(lat, lon, ACUU_TOKEN)
@@ -70,8 +70,8 @@ def main(message):
             post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
     elif message.text == "Сочи":
-        lat = 43.593232
-        lon = 39.727434
+        lat = '43.593232'
+        lon = '39.727434'
         post_ya = yandex_weather(lat, lon, message.text, YA_TOKEN)
         post_owm = owm_wather(message.text)
         code_loc = code_location(lat, lon, ACUU_TOKEN)

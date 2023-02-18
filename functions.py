@@ -70,8 +70,8 @@ def acuu_weather(city: str, code_loc: str, token_accu: str):
     return post
 
 #Функция запроса кода населёного пункта
-
-def code_location(latitude, longitude, token_accu: str):
+@lru_cache(maxsize=None)
+def code_location(latitude: str, longitude: str, token_accu: str):
     try:
         url_location_key = 'http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=' \
                        f'{token_accu}&q={latitude},{longitude}&language=ru'
