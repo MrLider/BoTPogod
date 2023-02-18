@@ -53,20 +53,24 @@ def owm_wather(city: str):
 
 #Функция запроса погоды с сервера AuuWeather
 def acuu_weather(city: str, code_loc: str, token_accu: str):
-    url_weather = f'http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/{code_loc}?' \
-                  f'apikey={token_accu}&language=ru&metric=True'
-    r = req.get(url_weather, headers={"APIKey": token_accu})
-    json_data = json.loads(r.text)
-    dict_weather = dict()
-    dict_weather['link'] = json_data[0]['MobileLink']
-    time = 'сейчас'
-    dict_weather[time] = {'temp': json_data[0]['Temperature']['Value'], 'sky': json_data[0]['IconPhrase']}
-    # for i in range(1, len(json_data)):
-    #     time = 'через' + str(i) + 'ч'
-    #     dict_weather[time] = {'temp': json_data[i]['Temperature']['Value'], 'sky': json_data[i]['IconPhrase']}
-    post = f' Погодный сервер AcuuWeather: \n'
-    post += f'В населённом пункте {city} сейчас {str(dict_weather["сейчас"]["sky"]).lower()}  \n'
-    post += f'Температура в районе {str(round(dict_weather["сейчас"]["temp"]))} °С'
+    try:
+        url_weather = f'http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/{code_loc}?' \
+                      f'apikey={token_accu}&language=ru&metric=True'
+        r = req.get(url_weather, headers={"APIKey": token_accu})
+        json_data = json.loads(r.text)
+        dict_weather = dict()
+        dict_weather['link'] = json_data[0]['MobileLink']
+        time = 'сейчас'
+        dict_weather[time] = {'temp': json_data[0]['Temperature']['Value'], 'sky': json_data[0]['IconPhrase']}
+        # for i in range(1, len(json_data)):
+        #     time = 'через' + str(i) + 'ч'
+        #     dict_weather[time] = {'temp': json_data[i]['Temperature']['Value'], 'sky': json_data[i]['IconPhrase']}
+        post = f' Погодный сервер AcuuWeather: \n'
+        post += f'В населённом пункте {city} сейчас {str(dict_weather["сейчас"]["sky"]).lower()}  \n'
+        post += f'Температура в районе {str(round(dict_weather["сейчас"]["temp"]))} °С'
+    except json.decoder.JSONDecodeError:
+        post = None
+
     return post
 
 #Функция запроса кода населёного пункта
@@ -75,9 +79,11 @@ def code_location(latitude: str, longitude: str, token_accu: str):
     try:
         url_location_key = 'http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=' \
                        f'{token_accu}&q={latitude},{longitude}&language=ru'
-        resp_loc = req.get(url_location_key, headers={"APIKey": token_accu})
-        json_data = json.loads(resp_loc.text)
+        r = req.get(url_location_key, headers={"APIKey": token_accu})
+        json_data = json.loads(r.text)
         code = json_data['Key']
     except KeyError:
+        code = None
+    except json.decoder.JSONDecodeError:
         code = None
     return code

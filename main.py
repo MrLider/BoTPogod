@@ -109,10 +109,6 @@ def main(message):
             post_owm = f"Населённый пункт не найден"
             post_ya = f"Введите название населённого пункта:"
             post_acuu = None
-        except json.decoder.JSONDecodeError:
-            lat, lon = geo_pos(message.text)
-            post_ya = yandex_weather(lat, lon, message.text, YA_TOKEN)
-            post_owm = owm_wather(message.text)
 
     if post_ya is None and post_acuu is None:
         bot.send_message(message.chat.id, post_owm)
