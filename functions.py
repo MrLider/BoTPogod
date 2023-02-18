@@ -3,6 +3,7 @@ import json
 import configparser
 import requests as req
 from functools import lru_cache
+from json.decoder import JSONDecodeError
 from geopy import geocoders
 from lib import dict_ya
 from pyowm.owm import OWM
@@ -35,14 +36,13 @@ def yandex_weather(latitude, longitude, city, token_yandex: str):
         post += f'В населённом пункте {city} сейчас {condition}  \n'
         post += f'Температура в районе {fact["temp"]} °С'
     else:
-        post = f'На сегодня достаточно.\n Погодный сервер Яндекс устал!'
+        post = None
     return post
 
 # Функция запроса погоды с сервера OWM
 def owm_wather(city: str):
     mgr = owm.weather_manager()
     observation = mgr.weather_at_place(city)
-    observation.weather.detailed_status
     w = observation.weather
     temp = w.temperature('celsius')["temp"]
     post = f'\n\n Погодный сервер OpenWeather: \n'
@@ -68,13 +68,12 @@ def acuu_weather(city: str, code_loc: str, token_accu: str):
         post = f' Погодный сервер AcuuWeather: \n'
         post += f'В населённом пункте {city} сейчас {str(dict_weather["сейчас"]["sky"]).lower()}  \n'
         post += f'Температура в районе {str(round(dict_weather["сейчас"]["temp"]))} °С'
-    except json.decoder.JSONDecodeError:
+    except JSONDecodeError:
         post = None
-
     return post
 
 #Функция запроса кода населёного пункта
-
+@lru_cache(maxsize=None)
 def code_location(latitude: str, longitude: str, token_accu: str):
     try:
         url_location_key = 'http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=' \
@@ -84,6 +83,7 @@ def code_location(latitude: str, longitude: str, token_accu: str):
         code = json_data['Key']
     except KeyError:
         code = None
-    except json.decoder.JSONDecodeError:
+    except JSONDecodeError:
         code = None
+    print(code_location.cache_info())
     return code

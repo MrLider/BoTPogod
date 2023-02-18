@@ -1,7 +1,6 @@
 import configparser
 import telebot
 import os, sys
-import json
 from requests.exceptions import ConnectionError, ReadTimeout
 from pyowm.utils.config import get_default_config
 from pyowm.commons.exceptions import NotFoundError
@@ -44,7 +43,7 @@ def main(message):
         post_owm = owm_wather(message.text)
         code_loc = code_location(lat, lon, ACUU_TOKEN)
         if code_loc is None:
-            post_acuu = f'На сегодня достаточно.\n Погодный сервер AcuuWeather устал!'
+            post_acuu = None
         else:
             post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
@@ -55,9 +54,10 @@ def main(message):
         post_owm = owm_wather(message.text)
         code_loc = code_location(lat, lon, ACUU_TOKEN)
         if code_loc is None:
-            post_acuu = f'На сегодня достаточно.\n Погодный сервер AcuuWeather устал!'
+            post_acuu = None
         else:
             post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
+
 
     elif message.text == "Кишинёв":
         lat = '46.88650'
@@ -65,10 +65,12 @@ def main(message):
         post_ya = yandex_weather(lat, lon, message.text, YA_TOKEN)
         post_owm = owm_wather(message.text)
         code_loc = code_location(lat, lon, ACUU_TOKEN)
+
         if code_loc is None:
-            post_acuu = f'На сегодня достаточно.\n Погодный сервер AcuuWeather устал!'
+            post_acuu = None
         else:
             post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
+
 
     elif message.text == "Сочи":
         lat = '43.593232'
@@ -77,7 +79,7 @@ def main(message):
         post_owm = owm_wather(message.text)
         code_loc = code_location(lat, lon, ACUU_TOKEN)
         if code_loc is None:
-            post_acuu = f'На сегодня достаточно.\n Погодный сервер AcuuWeather устал!'
+            post_acuu = None
         else:
             post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
@@ -93,9 +95,10 @@ def main(message):
             post_owm = owm_wather(message.text)
             code_loc = code_location(lat, lon, ACUU_TOKEN)
             if code_loc is None:
-                post_acuu = f'На сегодня достаточно.\n Погодный сервер AcuuWeather устал!'
+                post_acuu = None
             else:
                 post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
+
             print(geo_pos.cache_info())
         except NotFoundError:
             post_owm = f"Населённый пункт не найден"
@@ -110,11 +113,15 @@ def main(message):
             post_ya = f"Введите название населённого пункта:"
             post_acuu = None
 
-    if post_ya is None and post_acuu is None:
+    if post_acuu is None and post_ya is None:
         bot.send_message(message.chat.id, post_owm)
+    elif post_ya is None:
+        bot.send_message(message.chat.id, post_owm)
+        bot.send_message(message.chat.id, post_acuu)
     elif post_acuu is None:
         bot.send_message(message.chat.id, post_owm)
         bot.send_message(message.chat.id, post_ya)
+
     else:
         bot.send_message(message.chat.id, post_owm)
         bot.send_message(message.chat.id, post_ya)
