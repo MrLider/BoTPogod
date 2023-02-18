@@ -7,14 +7,14 @@ from pyowm.commons.exceptions import NotFoundError
 from telebot import types
 from functions import yandex_weather, geo_pos, owm_wather, code_location, acuu_weather
 
-
+# Переменные
 read_config = configparser.ConfigParser()
 read_config.read("settings.ini")
 BOT_TOKEN = read_config['settings']['token'].strip().replace(" ", "")  # Токен бота
 YA_TOKEN = read_config['settings']['token_yandex'].strip().replace(" ", "")  # Токен Yandex
 ACUU_TOKEN = read_config['settings']['token_acuu'].strip().replace(" ", "")  # Токен Yandex
 
-# Переменные
+
 config_dict = get_default_config()
 config_dict['language'] = 'ru'
 bot = telebot.TeleBot(BOT_TOKEN)

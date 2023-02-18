@@ -61,9 +61,9 @@ def acuu_weather(city: str, code_loc: str, token_accu: str):
     dict_weather['link'] = json_data[0]['MobileLink']
     time = 'сейчас'
     dict_weather[time] = {'temp': json_data[0]['Temperature']['Value'], 'sky': json_data[0]['IconPhrase']}
-    for i in range(1, len(json_data)):
-        time = 'через' + str(i) + 'ч'
-        dict_weather[time] = {'temp': json_data[i]['Temperature']['Value'], 'sky': json_data[i]['IconPhrase']}
+    # for i in range(1, len(json_data)):
+    #     time = 'через' + str(i) + 'ч'
+    #     dict_weather[time] = {'temp': json_data[i]['Temperature']['Value'], 'sky': json_data[i]['IconPhrase']}
     post = f' Погодный сервер AcuuWeather: \n'
     post += f'В населённом пункте {city} сейчас {str(dict_weather["сейчас"]["sky"]).lower()}  \n'
     post += f'Температура в районе {str(round(dict_weather["сейчас"]["temp"]))} °С'
@@ -71,7 +71,7 @@ def acuu_weather(city: str, code_loc: str, token_accu: str):
 
 #Функция запроса кода населёного пункта
 @lru_cache(maxsize=None)
-def code_location(latitude: str, longitude: str, token_accu: str):
+def code_location(latitude, longitude, token_accu: str):
     try:
         url_location_key = 'http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=' \
                        f'{token_accu}&q={latitude},{longitude}&language=ru'
