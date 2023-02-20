@@ -85,7 +85,9 @@ def code_location(latitude: str, longitude: str, token_accu: str):
         code = json_data['Key']
     except KeyError:
         code = None
+        code_location.cache_clear()
     except JSONDecodeError:
         code = None
+        code_location.cache_clear()
     print(code_location.cache_info())
     return code
