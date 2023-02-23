@@ -121,6 +121,9 @@ def main(message):
     elif post_acuu is None:
         bot.send_message(message.chat.id, post_owm)
         bot.send_message(message.chat.id, post_ya)
+    elif post_owm is None:
+        bot.send_message(message.chat.id, post_acuu)
+        bot.send_message(message.chat.id, post_ya)
 
     else:
         bot.send_message(message.chat.id, post_owm)

@@ -41,15 +41,19 @@ def yandex_weather(latitude, longitude, city, token_yandex: str):
 
 # Функция запроса погоды с сервера OWM
 def owm_wather(city: str):
-    mgr = owm.weather_manager()
-    observation = mgr.weather_at_place(city)
-    w = observation.weather
-    temp = w.temperature('celsius')["temp"]
-    post = f'\n\n Погодный сервер OpenWeather: \n'
-    post += f'В населенном пункте {city} сейчас {str(w.detailed_status)} \n'
-    post += f'Температура в районе {str(round(temp))} °С \n\n'
+    try:
+        mgr = owm.weather_manager()
+        observation = mgr.weather_at_place(city)
+        w = observation.weather
+        temp = w.temperature('celsius')["temp"]
+        post = f'\n\n Погодный сервер OpenWeather: \n'
+        post += f'В населенном пункте {city} сейчас {str(w.detailed_status)} \n'
+        post += f'Температура в районе {str(round(temp))} °С \n\n'
+    except TimeoutError:
+        post = None
 
     return post
+
 
 #Функция запроса погоды с сервера AuuWeather
 def acuu_weather(city: str, code_loc: str, token_accu: str):
