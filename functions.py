@@ -7,6 +7,7 @@ from json.decoder import JSONDecodeError
 from geopy import geocoders
 from lib import dict_ya
 from pyowm.owm import OWM
+from pyowm.commons.exceptions import TimeoutError
 
 
 
