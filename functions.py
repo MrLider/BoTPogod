@@ -77,6 +77,9 @@ def acuu_weather(city: str, code_loc: str, token_accu: str):
         post = None
     except JSONDecodeError:
         post = None
+    except TypeError:
+        post = None
+
     return post
 
 #Функция запроса кода населёного пункта
