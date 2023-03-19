@@ -44,6 +44,7 @@ def main(message):
         code_loc = code_location(lat, lon, ACUU_TOKEN)
         if code_loc is None:
             post_acuu = None
+            code_location.cache_clear()
         else:
             post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
@@ -55,6 +56,7 @@ def main(message):
         code_loc = code_location(lat, lon, ACUU_TOKEN)
         if code_loc is None:
             post_acuu = None
+            code_location.cache_clear()
         else:
             post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
@@ -68,6 +70,7 @@ def main(message):
 
         if code_loc is None:
             post_acuu = None
+            code_location.cache_clear()
         else:
             post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
@@ -80,6 +83,7 @@ def main(message):
         code_loc = code_location(lat, lon, ACUU_TOKEN)
         if code_loc is None:
             post_acuu = None
+            code_location.cache_clear()
         else:
             post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
@@ -96,6 +100,7 @@ def main(message):
             code_loc = code_location(lat, lon, ACUU_TOKEN)
             if code_loc is None:
                 post_acuu = None
+                code_location.cache_clear()
             else:
                 post_acuu = acuu_weather(message.text, code_loc, ACUU_TOKEN)
 
